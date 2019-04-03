@@ -1,11 +1,53 @@
 version: '2'
 
 services:
-  logstash:
-    # build: ./logstash
-    image: docker.elastic.co/logstash/logstash:6.7.0
-    env_file:
-      - ./common/common.env
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.7.0
+    ports:
+      - "5601:5601"
     volumes:
-      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-      - ./logstash/pipeline/:/usr/share/logstash/pipeline/:ro
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    links:
+      - elasticsearch
+    networks:
+      - elk-nw
+
+  elasticsearch:
+    # build: ./elk/elasticsearche
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.0
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    #   - ./elasticsearch/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties:ro
+      # - es-data:/usr/share/elasticsearch/data/
+    links:
+      - filebeat
+    networks:
+      - elk-nw
+
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:6.7.0
+  #   volumes:
+  #     - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+  #     - ./logstash/pipeline/:/usr/share/logstash/pipeline/:ro
+  #   links:
+  #     - filebeat
+  #   networks:
+  #     - elk-nw
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:6.7.0
+    environment:
+      - setup.kibana.host=kibana:5601
+      - output.elasticsearch.hosts=["elasticsearch:9200"]
+    # volumes:
+    #   - ./logstash/pipeline/:/usr/share/logstash/pipeline/:ro
+    networks:
+      - elk-nw
+
+networks:
+  elk-nw:
