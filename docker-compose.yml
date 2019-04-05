@@ -3,6 +3,8 @@ version: '2'
 services:
   kibana:
     image: docker.elastic.co/kibana/kibana:6.7.0
+    env_file: 
+      - ./common/common.env
     ports:
       - "5601:5601"
     volumes:
@@ -14,6 +16,8 @@ services:
 
   elasticsearch:
     build: ./elasticsearch
+    env_file: 
+      - ./common/common.env
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
@@ -39,6 +43,8 @@ services:
 
   filebeat:
     build: ./filebeat
+    env_file: 
+      - ./common/common.env
     volumes:
       - ./logs/nginx:/var/log/nginx
     links:
@@ -48,6 +54,8 @@ services:
 
   nginx:
     image: nginx
+    env_file: 
+      - ./common/common.env
     ports:
       - "81:80"
     volumes:
