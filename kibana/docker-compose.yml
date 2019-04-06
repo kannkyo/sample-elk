@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.7.0
+    env_file: 
+      - ../common/common.env
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    networks:
+      - elk-nw
+
+networks:
+  elk-nw:
