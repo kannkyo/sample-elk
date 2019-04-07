@@ -6,6 +6,7 @@ down () {
   cd ../
 }
 
+down logstash
 down filebeat
 down elasticsearch
 down kibana

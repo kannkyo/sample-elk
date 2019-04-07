@@ -10,4 +10,4 @@ up kibana
 up elasticsearch
 sleep 10s
 up filebeat
-
+up logstash
