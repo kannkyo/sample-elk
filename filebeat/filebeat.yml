@@ -15,3 +15,5 @@ setup:
     host: "kibana:5601"
   dashboards:
     enabled: true
+    retry:
+      enabled: true
