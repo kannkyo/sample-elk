@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+  logstash:
+    image: docker.elastic.co/logstash/logstash:6.7.1
+    env_file:
+      - ../common/common.env
+    volumes:
+      - ./settings/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./csv/pipeline/:/usr/share/logstash/pipeline/
+      - ./csv/logs:/var/log/csv:ro
+    networks:
+      - elk-nw
+
+networks:
+  elk-nw:
+    external:
+      name: kibana_elk-nw
