@@ -1,4 +1,4 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:6.7.0
+FROM elasticsearch:7.1.1
 
 COPY ./elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
 
